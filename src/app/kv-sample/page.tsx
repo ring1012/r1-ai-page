@@ -2,6 +2,8 @@ import { getCloudflareContext } from "@opennextjs/cloudflare"
 import { revalidatePath } from "next/cache"
 import PageLayout from "@/components/layout/PageLayout"
 
+export const dynamic = 'force-dynamic'
+
 export default async function KVSamplePage() {
   const { env } = await getCloudflareContext()
   const kvValue = await env.YOU.get("sample-key") || "No value set"
