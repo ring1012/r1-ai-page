@@ -2,7 +2,7 @@
 
 import PageLayout from '@/components/layout/PageLayout';
 import Link from 'next/link';
-import { BookOpen, Settings, ArrowRight, ShieldCheck, Cpu } from 'lucide-react';
+import { BookOpen, Settings, ArrowRight, ShieldCheck, Cpu, Smartphone } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
@@ -28,45 +28,51 @@ function HomeContent() {
       </section>
 
       {/* Main Navigation Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* KV Sample Card */}
-        <Link href={getFullHref("/kv-sample")} className="group">
-          <div className="h-full bg-neutral-900/40 border border-neutral-800 rounded-3xl p-8 hover:bg-neutral-800/40 hover:border-blue-500/50 transition-all duration-300 relative overflow-hidden flex flex-col justify-between group-hover:shadow-[0_0_50px_rgba(59,130,246,0.15)]">
+        {/* Device Management Card */}
+        <Link href={getFullHref("/devices")} className="group">
+          <div className="h-full bg-neutral-900/40 border border-neutral-800 rounded-3xl p-8 hover:bg-neutral-800/40 hover:border-green-500/50 transition-all duration-300 relative overflow-hidden flex flex-col justify-between group-hover:shadow-[0_0_50px_rgba(34,197,94,0.15)]">
             <div className="absolute top-0 right-0 p-8 transform group-hover:rotate-12 transition-transform opacity-20 group-hover:opacity-40">
-              <Cpu className="w-24 h-24 text-blue-400" />
+              <Smartphone className="w-24 h-24 text-green-400" />
             </div>
 
             <div className="relative z-10 space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400">
-                <Settings className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-400">
+                <Cpu className="w-6 h-6" />
               </div>
-              <h2 className="text-3xl font-bold text-white group-hover:text-blue-300 transition-colors">KV 管理示例</h2>
+              <h2 className="text-3xl font-bold text-white group-hover:text-green-300 transition-colors">设备管理</h2>
               <p className="text-neutral-400 leading-relaxed text-sm">
-                体验 Cloudflare KV 存储的极速读写。在 Edge 端直接处理状态，摒弃传统数据库的繁重。
+                管理 R1 智能音箱的 AI 引擎、智联配置及多媒体服务。支持批量配置与状态同步。
               </p>
             </div>
 
-            <div className="mt-8 flex items-center gap-2 text-blue-400 font-bold group-hover:gap-3 transition-all relative z-10">
-              立即体验 SSR 存储 <ArrowRight className="w-5 h-5" />
+            <div className="mt-8 flex items-center gap-2 text-green-400 font-bold group-hover:gap-3 transition-all relative z-10">
+              管理 IoT 设备 <ArrowRight className="w-5 h-5" />
             </div>
           </div>
         </Link>
 
-        {/* Placeholder / Future Feature Card */}
-        <div className="group">
-          <div className="h-full bg-neutral-900/10 border border-neutral-800 border-dashed rounded-3xl p-8 transition-all duration-300 flex flex-col justify-center items-center gap-4 text-center">
-            <div className="w-16 h-16 rounded-full bg-neutral-900 flex items-center justify-center text-neutral-600">
-               <ShieldCheck className="w-8 h-8" />
+        {/* Global Settings Card */}
+        <Link href={getFullHref("/settings")} className="group">
+          <div className="h-full bg-neutral-900/40 border border-neutral-800 rounded-3xl p-8 hover:bg-neutral-800/40 hover:border-purple-500/50 transition-all duration-300 relative overflow-hidden flex flex-col justify-between group-hover:shadow-[0_0_50px_rgba(168,85,247,0.15)]">
+            <div className="absolute top-0 right-0 p-8 transform group-hover:rotate-12 transition-transform opacity-20 group-hover:opacity-40">
+              <Settings className="w-24 h-24 text-purple-400" />
             </div>
-            <div>
-              <h2 className="text-xl font-bold text-neutral-500">更多功能开发中</h2>
-              <p className="text-neutral-600 text-sm mt-2 max-w-xs">
-                AI 服务集成、固件更新及语音指令集管理即将上线。
+
+            <div className="relative z-10 space-y-4">
+              <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <h2 className="text-3xl font-bold text-white group-hover:text-purple-300 transition-colors">服务配置</h2>
+              <p className="text-neutral-400 leading-relaxed text-sm">
+                集中配置全局服务器地址、YT-DLP 接入点等基础架构参数，确保系统稳定运行。
               </p>
             </div>
+
+            <div className="mt-8 flex items-center gap-2 text-purple-400 font-bold group-hover:gap-3 transition-all relative z-10">
+              全局架构设置 <ArrowRight className="w-5 h-5" />
+            </div>
           </div>
-        </div>
-      </div>
+        </Link>
 
       <footer className="pt-10 text-center border-t border-neutral-800/50">
         <div className="text-neutral-600 text-sm">

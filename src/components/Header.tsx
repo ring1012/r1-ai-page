@@ -4,7 +4,10 @@ import Link from 'next/link'
 import { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from '@/components/ui/navigation-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { LogOut, User, Lock, Settings } from 'lucide-react'
 
 const HeaderContent = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -17,6 +20,8 @@ const HeaderContent = () => {
 
   const navigationItems = [
     { href: '/', label: '首页' },
+    { href: '/devices', label: '设备管理' },
+    { href: '/settings', label: '服务配置' },
     { href: '/kv-sample', label: 'KV 示例' },
   ]
 
@@ -55,7 +60,47 @@ const HeaderContent = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-             {/* Action items if any */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full bg-gray-800/50 hover:bg-gray-700 text-gray-300">
+                  <User className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56 bg-gray-900 border-gray-800 text-white" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none text-white">管理员</p>
+                    <p className="text-xs leading-none text-gray-500">Session Active</p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-gray-800" />
+                <DropdownMenuGroup>
+                  <Link href={getFullHref("/settings/security")}>
+                    <DropdownMenuItem className="cursor-pointer focus:bg-gray-800 focus:text-white">
+                      <Lock className="mr-2 h-4 w-4 text-blue-400" />
+                      <span>账户安全</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href={getFullHref("/settings")}>
+                    <DropdownMenuItem className="cursor-pointer focus:bg-gray-800 focus:text-white">
+                      <Settings className="mr-2 h-4 w-4 text-purple-400" />
+                      <span>服务配置</span>
+                    </DropdownMenuItem>
+                  </Link>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator className="bg-gray-800" />
+                <DropdownMenuItem 
+                  className="cursor-pointer focus:bg-red-900/20 focus:text-red-400 text-red-500"
+                  onClick={async () => {
+                    const { logout } = await import('@/app/actions/auth')
+                    await logout()
+                  }}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>退出登录</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
@@ -68,6 +113,48 @@ const HeaderContent = () => {
           </Link>
 
           <div className="flex items-center space-x-3">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full bg-gray-800/50 hover:bg-gray-700 text-gray-300">
+                  <User className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56 bg-gray-900 border-gray-800 text-white" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none text-white">管理员</p>
+                    <p className="text-xs leading-none text-gray-500">Session Active</p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-gray-800" />
+                <DropdownMenuGroup>
+                  <Link href={getFullHref("/settings/security")}>
+                    <DropdownMenuItem className="cursor-pointer focus:bg-gray-800 focus:text-white">
+                      <Lock className="mr-2 h-4 w-4 text-blue-400" />
+                      <span>账户安全</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href={getFullHref("/settings")}>
+                    <DropdownMenuItem className="cursor-pointer focus:bg-gray-800 focus:text-white">
+                      <Settings className="mr-2 h-4 w-4 text-purple-400" />
+                      <span>服务配置</span>
+                    </DropdownMenuItem>
+                  </Link>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator className="bg-gray-800" />
+                <DropdownMenuItem 
+                  className="cursor-pointer focus:bg-red-900/20 focus:text-red-400 text-red-500"
+                  onClick={async () => {
+                    const { logout } = await import('@/app/actions/auth')
+                    await logout()
+                  }}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>退出登录</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <button
               onClick={toggleMobileMenu}
               className="p-2 rounded-md text-gray-300 hover:bg-gray-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-600"
@@ -92,7 +179,7 @@ const HeaderContent = () => {
 
         {/* Mobile Menu Dropdown */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden mt-4 pb-4 border-t border-gray-800">
+          <div className="lg:hidden mt-4 pb-4 border-t border-gray-800 animate-in slide-in-from-top-4 duration-300">
             <div className="flex flex-col space-y-2 pt-4">
               {navigationItems.map((item) => (
                 <Link
@@ -104,6 +191,33 @@ const HeaderContent = () => {
                   {item.label}
                 </Link>
               ))}
+              <div className="pt-4 mt-2 border-t border-gray-800 space-y-2">
+                <p className="px-4 text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-1">Account</p>
+                <Link
+                  href={getFullHref("/settings/security")}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white rounded-md transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Lock className="w-4 h-4 text-blue-400" /> 账户安全
+                </Link>
+                <Link
+                  href={getFullHref("/settings")}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white rounded-md transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Settings className="w-4 h-4 text-purple-400" /> 服务配置
+                </Link>
+                <button
+                  onClick={async () => {
+                    setIsMobileMenuOpen(false)
+                    const { logout } = await import('@/app/actions/auth')
+                    await logout()
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-400 hover:bg-red-900/10 rounded-md transition-colors text-left"
+                >
+                  <LogOut className="w-4 h-4" /> 退出登录
+                </button>
+              </div>
             </div>
           </div>
         )}
