@@ -201,11 +201,10 @@ export default function DevicesPage() {
             {editingDevice && (
               <div className="py-4">
                 <Tabs defaultValue="base" className="w-full">
-                  <TabsList className="grid grid-cols-4 bg-gray-800 border-gray-700">
+                  <TabsList className="grid grid-cols-3 bg-gray-800 border-gray-700">
                     <TabsTrigger value="base">基本</TabsTrigger>
                     <TabsTrigger value="ai">AI</TabsTrigger>
-                    <TabsTrigger value="hass">智联</TabsTrigger>
-                    <TabsTrigger value="other">服务</TabsTrigger>
+                    <TabsTrigger value="services">服务</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="base" className="space-y-4 p-4 bg-gray-800/30 rounded-lg mt-4 border border-gray-800">
@@ -232,14 +231,38 @@ export default function DevicesPage() {
                         />
                       </div>
                     </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="expireDays" className="text-gray-300 flex items-center justify-between">
+                          过期天数 (输入 0 为永久)
+                          {editingDevice.expireAt && (
+                            <span className="text-[10px] text-blue-400">
+                              到期于: {new Date(editingDevice.expireAt).toLocaleDateString()}
+                            </span>
+                          )}
+                        </Label>
+                        <Input
+                          id="expireDays"
+                          type="number"
+                          defaultValue={editingDevice.expireAt ? Math.max(0, Math.ceil((editingDevice.expireAt - Date.now()) / (1000 * 60 * 60 * 24))) : 0}
+                          onChange={(e) => {
+                            const days = parseInt(e.target.value) || 0;
+                            if (days === 0) {
+                              setEditingDevice({ ...editingDevice, expireAt: undefined });
+                            } else {
+                              const expireAt = Date.now() + days * 24 * 60 * 60 * 1000;
+                              setEditingDevice({ ...editingDevice, expireAt });
+                            }
+                          }}
+                          placeholder="输入过期天数..."
+                          className="bg-black border-gray-700 focus:ring-blue-500"
+                        />
+                      </div>
+                    </div>
                   </TabsContent>
 
                   <TabsContent value="ai" className="space-y-4 p-4 bg-gray-800/30 rounded-lg mt-4 border border-gray-800">
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label className="text-gray-300">AI schema</Label>
-                        <Input value={editingDevice.aiConfig.choice} disabled className="bg-black/50 border-gray-700 opacity-50" />
-                      </div>
                       <div className="space-y-2">
                         <Label htmlFor="model" className="text-gray-300">模型型号</Label>
                         <Input
@@ -287,51 +310,69 @@ export default function DevicesPage() {
                         className="bg-black border-gray-700 font-mono text-sm"
                       />
                     </div>
-                  </TabsContent>
-
-                  <TabsContent value="other" className="space-y-4 p-4 bg-gray-800/30 rounded-lg mt-4 border border-gray-800">
                     <div className="space-y-2">
-                      <Label htmlFor="mEndpoint" className="text-gray-300">音乐服务地址 (Endpoint)</Label>
+                      <Label htmlFor="cdn" className="text-gray-300">CDN 缓存 (Optional)</Label>
                       <Input
-                        id="mEndpoint"
-                        value={editingDevice.musicConfig.endpoint || ''}
-                        onChange={(e) => setEditingDevice({ ...editingDevice, musicConfig: { ...editingDevice.musicConfig, endpoint: e.target.value } })}
-                        placeholder="如: http://music-api.local"
-                        className="bg-black border-gray-700"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="locationId" className="text-gray-300">地理位置</Label>
-                      <Input
-                        id="locationId"
-                        value={editingDevice.musicConfig.locationId}
-                        onChange={(e) => setEditingDevice({ ...editingDevice, musicConfig: { ...editingDevice.musicConfig, locationId: e.target.value } })}
-                        placeholder="请输入城市编码..."
+                        id="cdn"
+                        value={editingDevice.aiConfig.cdn || ''}
+                        onChange={(e) => setEditingDevice({ ...editingDevice, aiConfig: { ...editingDevice.aiConfig, cdn: e.target.value } })}
+                        placeholder="如: https://cdn.example.com/v1"
                         className="bg-black border-gray-700"
                       />
                     </div>
                   </TabsContent>
 
-                  <TabsContent value="hass" className="space-y-4 p-4 bg-gray-800/30 rounded-lg mt-4 border border-gray-800">
-                    <div className="space-y-2">
-                      <Label htmlFor="hEndpoint" className="text-gray-300">Hass Endpoint</Label>
-                      <Input
-                        id="hEndpoint"
-                        value={editingDevice.hassConfig.endpoint || ''}
-                        onChange={(e) => setEditingDevice({ ...editingDevice, hassConfig: { ...editingDevice.hassConfig, endpoint: e.target.value } })}
-                        placeholder="如: http://192.168.1.100:8123"
-                        className="bg-black border-gray-700"
-                      />
+                  <TabsContent value="services" className="space-y-6 p-4 bg-gray-800/30 rounded-lg mt-4 border border-gray-800">
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-semibold text-blue-400 border-l-2 border-blue-400 pl-2">智联配置 (Hass)</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="hEndpoint" className="text-gray-300">Hass Endpoint</Label>
+                          <Input
+                            id="hEndpoint"
+                            value={editingDevice.hassConfig.endpoint || ''}
+                            onChange={(e) => setEditingDevice({ ...editingDevice, hassConfig: { ...editingDevice.hassConfig, endpoint: e.target.value } })}
+                            placeholder="如: http://公网域名/ip:8123"
+                            className="bg-black border-gray-700"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="hToken" className="text-gray-300">Long-Lived Access Token</Label>
+                          <Input
+                            id="hToken"
+                            type="password"
+                            value={editingDevice.hassConfig.token || ''}
+                            onChange={(e) => setEditingDevice({ ...editingDevice, hassConfig: { ...editingDevice.hassConfig, token: e.target.value } })}
+                            className="bg-black border-gray-700 font-mono"
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="hToken" className="text-gray-300">Long-Lived Access Token</Label>
-                      <Input
-                        id="hToken"
-                        type="password"
-                        value={editingDevice.hassConfig.token || ''}
-                        onChange={(e) => setEditingDevice({ ...editingDevice, hassConfig: { ...editingDevice.hassConfig, token: e.target.value } })}
-                        className="bg-black border-gray-700 font-mono"
-                      />
+
+                    <div className="space-y-4 pt-4 border-t border-gray-700">
+                      <h3 className="text-sm font-semibold text-purple-400 border-l-2 border-purple-400 pl-2">多媒体服务</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="mEndpoint" className="text-gray-300">音乐服务地址 (Endpoint)</Label>
+                          <Input
+                            id="mEndpoint"
+                            value={editingDevice.musicConfig.endpoint || ''}
+                            onChange={(e) => setEditingDevice({ ...editingDevice, musicConfig: { ...editingDevice.musicConfig, endpoint: e.target.value } })}
+                            placeholder="如: http://music-api.local"
+                            className="bg-black border-gray-700"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="locationId" className="text-gray-300">地理位置 (City Code)</Label>
+                          <Input
+                            id="locationId"
+                            value={editingDevice.musicConfig.locationId}
+                            onChange={(e) => setEditingDevice({ ...editingDevice, musicConfig: { ...editingDevice.musicConfig, locationId: e.target.value } })}
+                            placeholder="请输入城市编码..."
+                            className="bg-black border-gray-700"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </TabsContent>
                 </Tabs>

@@ -20,8 +20,7 @@ const HeaderContent = () => {
 
   const navigationItems = [
     { href: '/', label: '首页' },
-    { href: '/devices', label: '设备管理' },
-    { href: '/settings', label: '服务配置' }
+    { href: '/devices', label: '设备管理' }
   ]
 
   const getFullHref = (href: string) => {
@@ -80,12 +79,7 @@ const HeaderContent = () => {
                       <span>账户安全</span>
                     </DropdownMenuItem>
                   </Link>
-                  <Link href={getFullHref("/settings")}>
-                    <DropdownMenuItem className="cursor-pointer focus:bg-gray-800 focus:text-white">
-                      <Settings className="mr-2 h-4 w-4 text-purple-400" />
-                      <span>服务配置</span>
-                    </DropdownMenuItem>
-                  </Link>
+
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator className="bg-gray-800" />
                 <DropdownMenuItem
@@ -199,13 +193,7 @@ const HeaderContent = () => {
                 >
                   <Lock className="w-4 h-4 text-blue-400" /> 账户安全
                 </Link>
-                <Link
-                  href={getFullHref("/settings")}
-                  className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white rounded-md transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <Settings className="w-4 h-4 text-purple-400" /> 服务配置
-                </Link>
+
                 <button
                   onClick={async () => {
                     setIsMobileMenuOpen(false)

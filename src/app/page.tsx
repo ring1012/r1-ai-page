@@ -51,28 +51,7 @@ function HomeContent() {
           </div>
         </Link>
 
-        {/* Global Settings Card */}
-        <Link href={getFullHref("/settings")} className="group">
-          <div className="h-full bg-neutral-900/40 border border-neutral-800 rounded-3xl p-8 hover:bg-neutral-800/40 hover:border-purple-500/50 transition-all duration-300 relative overflow-hidden flex flex-col justify-between group-hover:shadow-[0_0_50px_rgba(168,85,247,0.15)]">
-            <div className="absolute top-0 right-0 p-8 transform group-hover:rotate-12 transition-transform opacity-20 group-hover:opacity-40">
-              <Settings className="w-24 h-24 text-purple-400" />
-            </div>
 
-            <div className="relative z-10 space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <h2 className="text-3xl font-bold text-white group-hover:text-purple-300 transition-colors">服务配置</h2>
-              <p className="text-neutral-400 leading-relaxed text-sm">
-                集中配置全局服务器地址、YT-DLP 接入点等基础架构参数，确保系统稳定运行。
-              </p>
-            </div>
-
-            <div className="mt-8 flex items-center gap-2 text-purple-400 font-bold group-hover:gap-3 transition-all relative z-10">
-              全局架构设置 <ArrowRight className="w-5 h-5" />
-            </div>
-          </div>
-        </Link>
 
       <footer className="pt-10 text-center border-t border-neutral-800/50">
         <div className="text-neutral-600 text-sm">

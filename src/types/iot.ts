@@ -27,6 +27,7 @@ export interface DeviceConfig {
   id: string;
   name: string;
   createdAt?: string;
+  expireAt?: number;
   aiConfig: AiConfig;
   hassConfig: HassConfig;
   newsConfig: NewsConfig;
@@ -44,7 +45,7 @@ export const DEFAULT_AI_CONFIG: AiConfig = {
   systemPrompt: "你是一个智能音箱",
   model: "Qwen/Qwen3-8B",
   endpoint: "https://api-inference.modelscope.cn/v1",
-  cdn: "https://yt.hutang.cloudns.be/v1",
+  cdn: "",
   extraBody: "{\"enable_thinking\":false}",
 };
 
