@@ -160,26 +160,17 @@ export default function DevicesPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end space-x-2">
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          onClick={() => handleSetCurrent(device.id)}
-                          className={device.id === currentDeviceId ? 'text-blue-400' : 'text-gray-500 hover:text-blue-400'}
-                          title="设为当前设备"
-                        >
-                          <CheckCircle className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           onClick={() => handleEdit(device)}
                           className="text-gray-500 hover:text-green-400"
                         >
                           <Edit2 className="h-4 w-4" />
                         </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           onClick={() => handleDelete(device.id)}
                           className="text-gray-500 hover:text-red-500"
                         >
@@ -221,21 +212,21 @@ export default function DevicesPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="id" className="text-gray-300">设备 ID</Label>
-                        <Input 
-                          id="id" 
+                        <Input
+                          id="id"
                           value={editingDevice.id}
                           disabled={!!editingDevice.createdAt}
-                          onChange={(e) => setEditingDevice({...editingDevice, id: e.target.value.toUpperCase()})}
+                          onChange={(e) => setEditingDevice({ ...editingDevice, id: e.target.value.toUpperCase() })}
                           placeholder="如: CBCAU1033K00457"
                           className="bg-black border-gray-700 focus:ring-blue-500 font-mono disabled:opacity-50"
                         />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="name" className="text-gray-300">设备名称</Label>
-                        <Input 
-                          id="name" 
+                        <Input
+                          id="name"
                           value={editingDevice.name}
-                          onChange={(e) => setEditingDevice({...editingDevice, name: e.target.value})}
+                          onChange={(e) => setEditingDevice({ ...editingDevice, name: e.target.value })}
                           placeholder="如: 上海客厅"
                           className="bg-black border-gray-700 focus:ring-blue-500"
                         />
@@ -246,54 +237,77 @@ export default function DevicesPage() {
                   <TabsContent value="ai" className="space-y-4 p-4 bg-gray-800/30 rounded-lg mt-4 border border-gray-800">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label className="text-gray-300">AI 平台</Label>
+                        <Label className="text-gray-300">AI schema</Label>
                         <Input value={editingDevice.aiConfig.choice} disabled className="bg-black/50 border-gray-700 opacity-50" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="model" className="text-gray-300">模型型号</Label>
-                        <Input 
-                          id="model" 
+                        <Input
+                          id="model"
                           value={editingDevice.aiConfig.model}
-                          onChange={(e) => setEditingDevice({...editingDevice, aiConfig: {...editingDevice.aiConfig, model: e.target.value}})}
+                          onChange={(e) => setEditingDevice({ ...editingDevice, aiConfig: { ...editingDevice.aiConfig, model: e.target.value } })}
                           className="bg-black border-gray-700"
                         />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="apiKey" className="text-gray-300">API Key</Label>
-                      <Input 
-                        id="apiKey" 
+                      <Input
+                        id="apiKey"
                         type="password"
                         value={editingDevice.aiConfig.key}
-                        onChange={(e) => setEditingDevice({...editingDevice, aiConfig: {...editingDevice.aiConfig, key: e.target.value}})}
+                        onChange={(e) => setEditingDevice({ ...editingDevice, aiConfig: { ...editingDevice.aiConfig, key: e.target.value } })}
                         className="bg-black border-gray-700 font-mono"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="endpoint" className="text-gray-300">API 接口地址</Label>
-                      <Input 
-                        id="endpoint" 
+                      <Input
+                        id="endpoint"
                         value={editingDevice.aiConfig.endpoint}
-                        onChange={(e) => setEditingDevice({...editingDevice, aiConfig: {...editingDevice.aiConfig, endpoint: e.target.value}})}
+                        onChange={(e) => setEditingDevice({ ...editingDevice, aiConfig: { ...editingDevice.aiConfig, endpoint: e.target.value } })}
                         className="bg-black border-gray-700"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="systemPrompt" className="text-gray-300">系统提示词 (System Prompt)</Label>
-                      <Input 
-                        id="systemPrompt" 
+                      <Input
+                        id="systemPrompt"
                         value={editingDevice.aiConfig.systemPrompt}
-                        onChange={(e) => setEditingDevice({...editingDevice, aiConfig: {...editingDevice.aiConfig, systemPrompt: e.target.value}})}
+                        onChange={(e) => setEditingDevice({ ...editingDevice, aiConfig: { ...editingDevice.aiConfig, systemPrompt: e.target.value } })}
                         className="bg-black border-gray-700"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="extraBody" className="text-gray-300">附加请求体 (JSON)</Label>
-                      <Input 
-                        id="extraBody" 
+                      <Input
+                        id="extraBody"
                         value={editingDevice.aiConfig.extraBody}
-                        onChange={(e) => setEditingDevice({...editingDevice, aiConfig: {...editingDevice.aiConfig, extraBody: e.target.value}})}
+                        onChange={(e) => setEditingDevice({ ...editingDevice, aiConfig: { ...editingDevice.aiConfig, extraBody: e.target.value } })}
                         className="bg-black border-gray-700 font-mono text-sm"
+                      />
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="other" className="space-y-4 p-4 bg-gray-800/30 rounded-lg mt-4 border border-gray-800">
+                    <div className="space-y-2">
+                      <Label htmlFor="mEndpoint" className="text-gray-300">音乐服务地址 (Endpoint)</Label>
+                      <Input
+                        id="mEndpoint"
+                        value={editingDevice.musicConfig.endpoint || ''}
+                        onChange={(e) => setEditingDevice({ ...editingDevice, musicConfig: { ...editingDevice.musicConfig, endpoint: e.target.value } })}
+                        placeholder="如: http://music-api.local"
+                        className="bg-black border-gray-700"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="locationId" className="text-gray-300">地理位置</Label>
+                      <Input
+                        id="locationId"
+                        value={editingDevice.musicConfig.locationId}
+                        onChange={(e) => setEditingDevice({ ...editingDevice, musicConfig: { ...editingDevice.musicConfig, locationId: e.target.value } })}
+                        placeholder="请输入城市编码..."
+                        className="bg-black border-gray-700"
                       />
                     </div>
                   </TabsContent>
@@ -301,55 +315,22 @@ export default function DevicesPage() {
                   <TabsContent value="hass" className="space-y-4 p-4 bg-gray-800/30 rounded-lg mt-4 border border-gray-800">
                     <div className="space-y-2">
                       <Label htmlFor="hEndpoint" className="text-gray-300">Hass Endpoint</Label>
-                      <Input 
-                        id="hEndpoint" 
+                      <Input
+                        id="hEndpoint"
                         value={editingDevice.hassConfig.endpoint || ''}
-                        onChange={(e) => setEditingDevice({...editingDevice, hassConfig: {...editingDevice.hassConfig, endpoint: e.target.value}})}
+                        onChange={(e) => setEditingDevice({ ...editingDevice, hassConfig: { ...editingDevice.hassConfig, endpoint: e.target.value } })}
                         placeholder="如: http://192.168.1.100:8123"
                         className="bg-black border-gray-700"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="hToken" className="text-gray-300">Long-Lived Access Token</Label>
-                      <Input 
-                        id="hToken" 
+                      <Input
+                        id="hToken"
                         type="password"
                         value={editingDevice.hassConfig.token || ''}
-                        onChange={(e) => setEditingDevice({...editingDevice, hassConfig: {...editingDevice.hassConfig, token: e.target.value}})}
+                        onChange={(e) => setEditingDevice({ ...editingDevice, hassConfig: { ...editingDevice.hassConfig, token: e.target.value } })}
                         className="bg-black border-gray-700 font-mono"
-                      />
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="other" className="space-y-4 p-4 bg-gray-800/30 rounded-lg mt-4 border border-gray-800">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label className="text-gray-300">新闻服务</Label>
-                        <Input value={editingDevice.newsConfig.choice} disabled className="bg-black/50 border-gray-700 opacity-50" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-gray-300">音乐服务</Label>
-                        <Input value={editingDevice.musicConfig.choice} disabled className="bg-black/50 border-gray-700 opacity-50" />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="mEndpoint" className="text-gray-300">音乐服务地址 (Endpoint)</Label>
-                      <Input 
-                        id="mEndpoint" 
-                        value={editingDevice.musicConfig.endpoint || ''}
-                        onChange={(e) => setEditingDevice({...editingDevice, musicConfig: {...editingDevice.musicConfig, endpoint: e.target.value}})}
-                        placeholder="如: http://music-api.local"
-                        className="bg-black border-gray-700"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="locationId" className="text-gray-300">位置编码 (locationId)</Label>
-                      <Input 
-                        id="locationId" 
-                        value={editingDevice.musicConfig.locationId}
-                        onChange={(e) => setEditingDevice({...editingDevice, musicConfig: {...editingDevice.musicConfig, locationId: e.target.value}})}
-                        placeholder="请输入城市编码..."
-                        className="bg-black border-gray-700"
                       />
                     </div>
                   </TabsContent>
@@ -361,8 +342,8 @@ export default function DevicesPage() {
               <Button variant="ghost" onClick={() => setIsDialogOpen(false)} className="text-gray-400 hover:text-white">
                 <X className="mr-2 h-4 w-4" /> 取消
               </Button>
-              <Button 
-                onClick={handleSave} 
+              <Button
+                onClick={handleSave}
                 disabled={isSaving}
                 className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg w-full sm:w-auto px-10"
               >

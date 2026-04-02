@@ -21,8 +21,7 @@ const HeaderContent = () => {
   const navigationItems = [
     { href: '/', label: '首页' },
     { href: '/devices', label: '设备管理' },
-    { href: '/settings', label: '服务配置' },
-    { href: '/kv-sample', label: 'KV 示例' },
+    { href: '/settings', label: '服务配置' }
   ]
 
   const getFullHref = (href: string) => {
@@ -89,7 +88,7 @@ const HeaderContent = () => {
                   </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator className="bg-gray-800" />
-                <DropdownMenuItem 
+                <DropdownMenuItem
                   className="cursor-pointer focus:bg-red-900/20 focus:text-red-400 text-red-500"
                   onClick={async () => {
                     const { logout } = await import('@/app/actions/auth')
@@ -142,7 +141,7 @@ const HeaderContent = () => {
                   </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator className="bg-gray-800" />
-                <DropdownMenuItem 
+                <DropdownMenuItem
                   className="cursor-pointer focus:bg-red-900/20 focus:text-red-400 text-red-500"
                   onClick={async () => {
                     const { logout } = await import('@/app/actions/auth')

@@ -10,7 +10,7 @@ const KEY_CURRENT_DEVICE_ID = "state:currentDeviceId"
 
 export async function getGlobalConfig(): Promise<GlobalConfig> {
   const { env } = await getCloudflareContext()
-  const val = await env.YOU.get(KEY_GLOBAL_CONFIG)
+  const val = await env.R1.get(KEY_GLOBAL_CONFIG)
   if (!val) return DEFAULT_GLOBAL_CONFIG
   try {
     return JSON.parse(val)
@@ -21,17 +21,17 @@ export async function getGlobalConfig(): Promise<GlobalConfig> {
 
 export async function updateGlobalConfig(config: GlobalConfig) {
   const { env } = await getCloudflareContext()
-  await env.YOU.put(KEY_GLOBAL_CONFIG, JSON.stringify(config))
+  await env.R1.put(KEY_GLOBAL_CONFIG, JSON.stringify(config))
   revalidatePath("/settings")
   return { success: true }
 }
 
 export async function getDevices(): Promise<DeviceConfig[]> {
   const { env } = await getCloudflareContext()
-  const list = await env.YOU.list({ prefix: PREFIX_DEVICE })
+  const list = await env.R1.list({ prefix: PREFIX_DEVICE })
   const devices: DeviceConfig[] = []
   for (const key of list.keys) {
-    const val = await env.YOU.get(key.name)
+    const val = await env.R1.get(key.name)
     if (val) {
       try {
         devices.push(JSON.parse(val))
@@ -45,7 +45,7 @@ export async function getDevices(): Promise<DeviceConfig[]> {
 
 export async function getDevice(id: string): Promise<DeviceConfig | null> {
   const { env } = await getCloudflareContext()
-  const val = await env.YOU.get(`${PREFIX_DEVICE}${id}`)
+  const val = await env.R1.get(`${PREFIX_DEVICE}${id}`)
   if (!val) return null
   try {
     return JSON.parse(val)
@@ -57,9 +57,9 @@ export async function getDevice(id: string): Promise<DeviceConfig | null> {
 export async function saveDevice(device: DeviceConfig) {
   const { env } = await getCloudflareContext()
   const key = `${PREFIX_DEVICE}${device.id}`
-  const existing = await env.YOU.get(key)
+  const existing = await env.R1.get(key)
   let toSave = { ...device }
-  
+
   if (!existing) {
     toSave.createdAt = new Date().toISOString()
   } else {
@@ -72,19 +72,19 @@ export async function saveDevice(device: DeviceConfig) {
     }
   }
 
-  await env.YOU.put(key, JSON.stringify(toSave))
+  await env.R1.put(key, JSON.stringify(toSave))
   revalidatePath("/devices")
   return { success: true }
 }
 
 export async function deleteDevice(id: string) {
   const { env } = await getCloudflareContext()
-  await env.YOU.delete(`${PREFIX_DEVICE}${id}`)
-  
+  await env.R1.delete(`${PREFIX_DEVICE}${id}`)
+
   // If current device is deleted, clear it
-  const current = await env.YOU.get(KEY_CURRENT_DEVICE_ID)
+  const current = await env.R1.get(KEY_CURRENT_DEVICE_ID)
   if (current === id) {
-    await env.YOU.delete(KEY_CURRENT_DEVICE_ID)
+    await env.R1.delete(KEY_CURRENT_DEVICE_ID)
   }
 
   revalidatePath("/devices")
@@ -93,15 +93,15 @@ export async function deleteDevice(id: string) {
 
 export async function getCurrentDeviceId(): Promise<string | null> {
   const { env } = await getCloudflareContext()
-  return await env.YOU.get(KEY_CURRENT_DEVICE_ID)
+  return await env.R1.get(KEY_CURRENT_DEVICE_ID)
 }
 
 export async function setCurrentDeviceId(id: string | null) {
   const { env } = await getCloudflareContext()
   if (id) {
-    await env.YOU.put(KEY_CURRENT_DEVICE_ID, id)
+    await env.R1.put(KEY_CURRENT_DEVICE_ID, id)
   } else {
-    await env.YOU.delete(KEY_CURRENT_DEVICE_ID)
+    await env.R1.delete(KEY_CURRENT_DEVICE_ID)
   }
   return { success: true }
 }
