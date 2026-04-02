@@ -131,13 +131,14 @@ export default function DevicesPage() {
                 <TableHead className="text-gray-300">设备名称</TableHead>
                 <TableHead className="text-gray-300">设备 ID</TableHead>
                 <TableHead className="text-gray-300 hidden md:table-cell">创建时间</TableHead>
+                <TableHead className="text-gray-300 hidden md:table-cell">过期时间</TableHead>
                 <TableHead className="text-gray-300 text-right">操作</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {devices.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-10 text-gray-500 font-medium">暂无设备，点击上方按钮添加。</TableCell>
+                  <TableCell colSpan={5} className="text-center py-10 text-gray-500 font-medium">暂无设备，点击上方按钮添加。</TableCell>
                 </TableRow>
               ) : (
                 devices.map((device) => (
@@ -156,6 +157,20 @@ export default function DevicesPage() {
                       <div className="flex items-center">
                         <Clock className="mr-1 h-3 w-3" />
                         {device.createdAt ? new Date(device.createdAt).toLocaleDateString() : '-'}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-gray-500 text-xs hidden md:table-cell">
+                      <div className="flex items-center">
+                        {device.expireAt ? (
+                          <div className="flex items-center space-x-1">
+                            <Clock className={`h-3 w-3 ${Date.now() > device.expireAt ? 'text-red-500' : 'text-blue-400'}`} />
+                            <span className={Date.now() > device.expireAt ? 'text-red-500 font-medium' : 'text-gray-300'}>
+                              {new Date(device.expireAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-green-500 font-medium">永久</span>
+                        )}
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
@@ -324,6 +339,32 @@ export default function DevicesPage() {
 
                   <TabsContent value="services" className="space-y-6 p-4 bg-gray-800/30 rounded-lg mt-4 border border-gray-800">
                     <div className="space-y-4">
+                      <h3 className="text-sm font-semibold text-purple-400 border-l-2 border-purple-400 pl-2">多媒体服务</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="mEndpoint" className="text-gray-300">音乐服务地址 (Endpoint)</Label>
+                          <Input
+                            id="mEndpoint"
+                            value={editingDevice.musicConfig.endpoint || ''}
+                            onChange={(e) => setEditingDevice({ ...editingDevice, musicConfig: { ...editingDevice.musicConfig, endpoint: e.target.value } })}
+                            placeholder="如: http://music-api.local"
+                            className="bg-black border-gray-700"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="locationId" className="text-gray-300">天气地理位置 (City Code)</Label>
+                          <Input
+                            id="locationId"
+                            value={editingDevice.musicConfig.locationId}
+                            onChange={(e) => setEditingDevice({ ...editingDevice, musicConfig: { ...editingDevice.musicConfig, locationId: e.target.value } })}
+                            placeholder="请输入城市编码..."
+                            className="bg-black border-gray-700"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4 pt-4 border-t border-gray-700">
                       <h3 className="text-sm font-semibold text-blue-400 border-l-2 border-blue-400 pl-2">智联配置 (Hass)</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
@@ -344,32 +385,6 @@ export default function DevicesPage() {
                             value={editingDevice.hassConfig.token || ''}
                             onChange={(e) => setEditingDevice({ ...editingDevice, hassConfig: { ...editingDevice.hassConfig, token: e.target.value } })}
                             className="bg-black border-gray-700 font-mono"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4 pt-4 border-t border-gray-700">
-                      <h3 className="text-sm font-semibold text-purple-400 border-l-2 border-purple-400 pl-2">多媒体服务</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="mEndpoint" className="text-gray-300">音乐服务地址 (Endpoint)</Label>
-                          <Input
-                            id="mEndpoint"
-                            value={editingDevice.musicConfig.endpoint || ''}
-                            onChange={(e) => setEditingDevice({ ...editingDevice, musicConfig: { ...editingDevice.musicConfig, endpoint: e.target.value } })}
-                            placeholder="如: http://music-api.local"
-                            className="bg-black border-gray-700"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="locationId" className="text-gray-300">地理位置 (City Code)</Label>
-                          <Input
-                            id="locationId"
-                            value={editingDevice.musicConfig.locationId}
-                            onChange={(e) => setEditingDevice({ ...editingDevice, musicConfig: { ...editingDevice.musicConfig, locationId: e.target.value } })}
-                            placeholder="请输入城市编码..."
-                            className="bg-black border-gray-700"
                           />
                         </div>
                       </div>
